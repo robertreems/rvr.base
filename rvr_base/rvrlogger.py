@@ -6,7 +6,7 @@ from .constants import NOTIFY_APPLICATION_EVENT, VALID_MESSAGE_TYPES
 from notify_run import Notify
 
 # Todo maak netjes
-class Mylogger(loganalyticslogger.Log_analytics_logger):
+class Rvrlogger(loganalyticslogger.Log_analytics_logger):
 
     def __init__(self):
         super().__init__()

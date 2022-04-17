@@ -9,14 +9,14 @@ import base64
 import logging
 import datetime
 from platform import node
-from . import config
+from . import rvrconfig
 from .constants import CONFIG_FILE, LOG_TYPE_APPLICATION_EVENT
 
 
 class Log_analytics_logger:
 
     def __init__(self):
-        self.conf = config.config(CONFIG_FILE)
+        self.conf = rvrconfig.Rvrconfig(CONFIG_FILE)
 
     def build_signature(self, customer_id, shared_key, date, content_length, method, content_type, resource):
         """Returns authorization header which will be used when sending data into Azure Log Analytics"""

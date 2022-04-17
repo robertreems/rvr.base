@@ -1,4 +1,5 @@
 ﻿rvr_base/__pycache__/
 venv/
+venvtest/
 dist/
-rvr.base.egg-info/
+rvr_base.egg-info/

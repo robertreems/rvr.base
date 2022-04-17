@@ -5,7 +5,7 @@ import errno
 import os
 
 
-class config:
+class Rvrconfig:
 
     def __init__(self, path):
         self.path = path
