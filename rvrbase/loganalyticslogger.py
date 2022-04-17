@@ -10,7 +10,7 @@ import logging
 import datetime
 from platform import node
 from . import rvrconfig
-from .constants import CONFIG_FILE, LOG_TYPE_APPLICATION_EVENT
+from .constants import CONFIG_FILE, ERR_POST_DATA, LOG_TYPE_APPLICATION_EVENT, MSG_POST_DATA_SUCCESS
 
 
 class Log_analytics_logger:
@@ -62,10 +62,10 @@ class Log_analytics_logger:
 
         response = requests.post(uri, data=body, headers=headers)
         if (response.status_code >= 200 and response.status_code <= 299):
-            logging.info('Accepted payload:' + body)
+            logging.info(MSG_POST_DATA_SUCCESS.format(body=body))
         else:
-            logging.error("Unable to Write: " +
-                          format(response.status_code))  # todo throw
+            raise RuntimeError(ERR_POST_DATA.format(
+                status_code=response.status_code))
 
     def post_application_event(self, type, message):
         body = {
@@ -80,12 +80,12 @@ class Log_analytics_logger:
 
         self.post_data(body_json, LOG_TYPE_APPLICATION_EVENT)
 
-    def post_metric(self,log_type, metric_name, value):
+    def post_metric(self, log_type, metric_name, value):
         body = {
             "hostname": node(),
             "script_path": sys.argv[0],
-            "metric_name" : metric_name,
-            "value" : value
+            "metric_name": metric_name,
+            "value": value
         }
 
         body_json = json.dumps(body)

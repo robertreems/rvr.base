@@ -5,7 +5,7 @@ from platform import node
 from .constants import NOTIFY_APPLICATION_EVENT, VALID_MESSAGE_TYPES
 from notify_run import Notify
 
-# Todo maak netjes
+
 class Rvrlogger(loganalyticslogger.Log_analytics_logger):
 
     def __init__(self):
@@ -38,4 +38,5 @@ class Rvrlogger(loganalyticslogger.Log_analytics_logger):
             logging.error(message)
 
         if notify_message:
-            self.notify.send(NOTIFY_APPLICATION_EVENT.format(type=type, node=node(), message=message))
+            self.notify.send(NOTIFY_APPLICATION_EVENT.format(
+                type=type, node=node(), message=message))

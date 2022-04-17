@@ -31,25 +31,12 @@ Make sure the cursor is the root folder of the project and run:
 `python3 setup.py bdist_wheel`
 
 Be sure to test newly build module by installing it on a new venv:
-`pip3 install dist/rvr_base-<VERSION AND THE REST OF THE FILE>`
+`pip3 install dist/rvrbase-<VERSION AND THE REST OF THE FILE>`
 You're advised to create a new virtual environment and test the package there.
 
 
 # Using the module
-An example says more than 1000 words in my opinion:
-```Python
-from rvr_base import rvrlogger
-from rvr_base import rvrconfig
-from rvr_base import constants
-
-# Log something.
-thelogger = rvrlogger.Rvrlogger()
-thelogger.log_application_event(type='warning', message='No worries, just testing here.')
-
-# print something from the configuration file.
-rvrconfig = rvrconfig.Rvrconfig(constants.CONFIG_FILE)
-print(rvrconfig.q1('workspace_id'))
-``` 
+An example says more than 1000 words in my opinion. Please see the example.py file in this project for examples.
 
 # Distributing the module
 python3 -m twine upload dist/* --verbose -u <PyPi username>
