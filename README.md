@@ -30,16 +30,29 @@ Make sure you'll have the following PIP packages installed:
 Make sure the cursor is the root folder of the project and run:
 `python3 setup.py bdist_wheel`
 
-Be sure to test newly build module by installing it on a new venv:
-`pip3 install dist/rvrbase-<VERSION AND THE REST OF THE FILE>`
-You're advised to create a new virtual environment and test the package there.
-
-
 # Using the module
 An example says more than 1000 words in my opinion. Please see the example.py file in this project for examples.
 
 # Distributing the module
 python3 -m twine upload dist/* --verbose -u <PyPi username>
+
+# testing the build module
+Yeah I know this isn't proper testing but for now I've got to do with it.
+Here is an example:
+
+```Bash
+# create a Python virtual environment:
+python3 -m venv venv
+
+# Make the environment active
+source venv/bin/activate
+
+# Install the build module
+pip3 install dist/rvrbase-<VERSION AND THE REST OF THE FILE>
+
+#Run the example script
+python3 example.py
+```
 
 # Credits
 Kia Eisinga for writning a good explaination on how to create a Python package
