@@ -4,10 +4,11 @@ This is Roberts personal base module. Currently it provides the following functi
 - Sending notifications using https://notify.run/
 - Querying configuration from a single configuration (.ini) file.
 
-
-# Prerequistes
+## Prerequistes
 You'll need an Azure log analytics workspace. This is where the logs are send to.
-This module is developed for Linux and tested only on Ubuntu 20.04 using Python 3.8.10.
+This module is developed for Linux and tested on:
+Ubuntu 20.04 using Python 3.8.10.
+Raspberry Pi OS using Python 3.9.2
 
 **The configurationfile**
 The configuration file is used for some configuration settings like the Log analytics workspace and password... it's a bad practice I know... Perhaps I'll improve the security later on. The file is located in '/etc/rvr/config.ini'.
@@ -19,7 +20,13 @@ workspace_id = ID OF YOUR WORKSPACE
 primary_key = THE KEY OF  YOUR WORKSPACE
 ``` 
 
-# Building
+## Installing the module
+Just install the module with `pip3 install rvr-base`.
+
+## Using the module
+An example says more than 1000 words in my opinion. Please see the example.py file in this project for examples.
+
+## Building
 **Prerequistes for building**
 Make sure you'll have the following PIP packages installed:
 - wheel
@@ -30,14 +37,11 @@ Make sure you'll have the following PIP packages installed:
 Make sure the cursor is the root folder of the project and run:
 `python3 -m build`
 
-# Using the module
-An example says more than 1000 words in my opinion. Please see the example.py file in this project for examples.
-
-# Distributing the module
+## Distributing the module
 python3 -m twine upload dist/* --verbose -u <PyPi username>
 
-# testing the build module
-Yeah I know this isn't proper testing but for now I've got to do with it.
+## Testing the build module
+Yeah I know, this isn't proper testing. But for now I've got to do with it.
 Here is an example:
 
 ```Bash
@@ -54,5 +58,5 @@ pip3 install dist/rvrbase-<VERSION AND THE REST OF THE FILE>
 python3 example.py
 ```
 
-# Other sources used
+## Sources used
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
