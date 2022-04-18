@@ -7,8 +7,8 @@ This is Roberts personal base module. Currently it provides the following functi
 ## Prerequistes
 You'll need an Azure log analytics workspace. This is where the logs are send to.
 This module is developed for Linux and tested on:
-Ubuntu 20.04 using Python 3.8.10.
-Raspberry Pi OS using Python 3.9.2
+- Ubuntu 20.04 using Python 3.8.10.
+- Raspberry Pi OS using Python 3.9.2
 
 **The configurationfile**
 The configuration file is used for some configuration settings like the Log analytics workspace and password... it's a bad practice I know... Perhaps I'll improve the security later on. The file is located in '/etc/rvr/config.ini'.
@@ -60,3 +60,6 @@ python3 example.py
 
 ## Sources used
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
+
+## Disclaimer
+This module has been written for my personal use. Feel free to use it but at your own discression. There is no support or whatsoever on my part. 
