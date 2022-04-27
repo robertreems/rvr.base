@@ -1,4 +1,4 @@
-﻿# from https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
+# from https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
 
 import json
 import sys
