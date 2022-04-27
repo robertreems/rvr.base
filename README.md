@@ -52,7 +52,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Install the build module
-pip3 install dist/rvrbase-<VERSION AND THE REST OF THE FILE>
+pip3 install ./dist/rvrbase-<VERSION AND THE REST OF THE FILE>.whl
 
 #Run the example script
 python3 example.py

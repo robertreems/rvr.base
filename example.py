@@ -1,12 +1,12 @@
-from src.rvrbase import rvrlogger
-from src.rvrbase import rvrconfig
-from src.rvrbase import constants
+# Please make sure PYTHONPATH is set to the src directory before running this script.
+
+import rvrbase as rvrbase
 
 # Log something.
-thelogger = rvrlogger.Rvrlogger()
+thelogger = rvrbase.Rvrlogger()
 thelogger.log_application_event(
     type='warning', message='No worries, just testing here.')
 
 # print something from the configuration file.
-rvrconfig = rvrconfig.Rvrconfig(constants.CONFIG_FILE)
-print(rvrconfig.q1('workspace_id'))
+rvrconfig = rvrbase.Rvrconfig(rvrbase.CONFIG_FILE)
+print(rvrconfig.q1('hwip'))

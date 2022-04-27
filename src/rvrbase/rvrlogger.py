@@ -1,4 +1,4 @@
-﻿from dbus import ValidationException
+from dbus import ValidationException
 from . import loganalyticslogger
 import logging
 from platform import node
@@ -22,7 +22,7 @@ class Rvrlogger(loganalyticslogger.Log_analytics_logger):
         self.log_application_event(type='info', message=message)
 
     def log_application_event(self, type, message, notify_message=False):
-        if not type in VALID_MESSAGE_TYPES:
+        if type not in VALID_MESSAGE_TYPES:
             raise ValidationException(
                 f'{type} is not in {VALID_MESSAGE_TYPES}.')
 

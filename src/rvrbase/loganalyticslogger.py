@@ -18,8 +18,10 @@ class Log_analytics_logger:
     def __init__(self):
         self.conf = rvrconfig.Rvrconfig(CONFIG_FILE)
 
-    def build_signature(self, customer_id, shared_key, date, content_length, method, content_type, resource):
-        """Returns authorization header which will be used when sending data into Azure Log Analytics"""
+    def build_signature(self, customer_id, shared_key, date, content_length, method, content_type,
+                        resource):
+        # Returns authorization header which will be used when sending data into Azure Log
+        # Analytics
 
         x_headers = 'x-ms-date:' + date
         string_to_hash = method + "\n" + \
@@ -48,7 +50,9 @@ class Log_analytics_logger:
         rfc1123date = datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
         content_length = len(body)
         signature = self.build_signature(
-            self.conf.q1('workspace_id'), self.conf.q1('primary_key'), rfc1123date, content_length, method, content_type, resource)
+            self.conf.q1('workspace_id'), self.conf.q1(
+                'primary_key'), rfc1123date,
+            content_length, method, content_type, resource)
 
         uri = 'https://' + self.conf.q1('workspace_id') + '.ods.opinsights.azure.com' + \
             resource + '?api-version=2016-04-01'
