@@ -8,14 +8,14 @@ class Testrvrconfig(unittest.TestCase):
 
     def test_rvrconfig_wrong_file(self):
         with self.assertRaises(FileNotFoundError):
-            rvrbase.Mydelegate('filedoesnotexist.ini')
+            rvrbase.Rvrbase('filedoesnotexist.ini')
 
     @mock.patch('requests.post')
     def test_rvrconfig_q1_success(self, mock_requests_post):
         mock_requests_post.return_value = mock.Mock()
         mock_requests_post.return_value.status_code = 200
 
-        config = rvrbase.Mydelegate('src/test/testdata/config.ini')
+        config = rvrbase.Rvrbase('src/test/testdata/config.ini')
         self.assertEqual(config.q1('workspace_id'),
                          '7756814b-7720-4b6d-9fb6-0aa03fe97658')
 
@@ -24,7 +24,7 @@ class Testrvrconfig(unittest.TestCase):
         mock_requests_post.return_value = mock.Mock()
         mock_requests_post.return_value.status_code = 200
 
-        config = rvrbase.Mydelegate('src/test/testdata/config.ini')
+        config = rvrbase.Rvrbase('src/test/testdata/config.ini')
         self.assertEqual(config.q1('doesnotexist'), None)
 
     # Happy flow of all the functionality in delegate.
@@ -38,7 +38,7 @@ class Testrvrconfig(unittest.TestCase):
         mock_requests_post.return_value = mock.Mock()
         mock_requests_post.return_value.status_code = 200
 
-        rvrlogger = rvrbase.Mydelegate('src/test/testdata/config.ini')
+        rvrlogger = rvrbase.Rvrbase('src/test/testdata/config.ini')
         rvrlogger.log_app_event(
             type='warning', message='No worries, just testing here.', notify_message=True)
 

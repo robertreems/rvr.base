@@ -3,7 +3,7 @@
 import rvrbase as rvrbase
 
 # Log something.
-newdelegate = rvrbase.Mydelegate(rvrbase.CONFIG_FILE)
+newdelegate = rvrbase.Rvrbase(rvrbase.CONFIG_FILE)
 # logs to both the system (using logger) and Azure.
 newdelegate.log_app_event(type='warning', message='Dit is een test met nieuw design pattern.')
 # Sends the message to Azure only.

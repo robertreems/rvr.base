@@ -2,28 +2,30 @@ import logging
 from platform import node
 import json
 import sys
-
 from dbus import ValidationException
+
 from rvrbase import rvrconfig_delegate
-import rvrbase
-from .new_notification_api import My_new_notification_api
-from .new_azure_logger_api import My_azure_logger_api
-from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, NOTIFY_APPLICATION_EVENT, VALID_MESSAGE_TYPES
+from .__about__ import __version__ as version
+from .notification_api import New_notification_api
+from .azure_logger_api import Azure_logger_api
+from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, NOTIFY_APPLICATION_EVENT,\
+    VALID_MESSAGE_TYPES
 
 # todo put it all in try / except
 
 
-class Mydelegate(rvrconfig_delegate.Rvrconfig):
+class Rvrbase(rvrconfig_delegate.Rvrconfig):
 
     def __init__(self, path):
         super().__init__(path)
 
-        self.notifcation_api = My_new_notification_api()
-        self.azure_logger_api = My_azure_logger_api()
+        self.notifcation_api = New_notification_api()
+        self.azure_logger_api = Azure_logger_api()
         self.workspace_id = self.q1('workspace_id')
         self.workspace_prim_key = self.q1('primary_key')
 
-        message = f'Starting, notify URL: {self.notifcation_api.notify.endpoint}' # todo to constant.
+        # todo to constant.
+        message = f'Starting, notify URL: {self.notifcation_api.notify.endpoint}'
         self.send_az_app_event(type='info', message=message)
 
     def send_browser_notification(self, message, type):
@@ -38,7 +40,7 @@ class Mydelegate(rvrconfig_delegate.Rvrconfig):
         if type not in VALID_MESSAGE_TYPES:
             raise ValidationException(
                 f'{type} is not in {VALID_MESSAGE_TYPES}.')  # todo use constants.
-                
+
         if type == 'debug':
             logging.debug(message)
         elif type == 'info':
@@ -64,7 +66,7 @@ class Mydelegate(rvrconfig_delegate.Rvrconfig):
             "arguments": sys.argv[1:],
             "type": type,
             "message": message,
-            "rvrbase_version": rvrbase.__version__
+            "rvrbase_version": version
         }
 
         body_json = json.dumps(body)
@@ -78,8 +80,9 @@ class Mydelegate(rvrconfig_delegate.Rvrconfig):
             "script_path": sys.argv[0],
             "metric_name": metric_name,
             "value": value,
-            "rvrbase_version": rvrbase.__version__
+            "rvrbase_version": version
         }
 
         body_json = json.dumps(body)
-        self.azure_logger_api.post_data(body_json, log_type, self.workspace_id, self.workspace_prim_key)
+        self.azure_logger_api.post_data(
+            body_json, log_type, self.workspace_id, self.workspace_prim_key)

@@ -1,7 +1,7 @@
-﻿from notify_run import Notify
+from notify_run import Notify
 
 
-class My_new_notification_api:
+class New_notification_api:
     def __init__(self):
         super().__init__()
         self.notify = Notify()

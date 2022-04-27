@@ -1,20 +1,14 @@
 # from https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
-
-import json
-import sys
-from dbus import ValidationException
 import requests
 import hashlib
 import hmac
 import base64
 import logging
 import datetime
-from platform import node
-import rvrbase
-from .constants import CONFIG_FILE, ERR_POST_DATA, LOG_TYPE_APPLICATION_EVENT, MSG_POST_DATA_SUCCESS, VALID_MESSAGE_TYPES
+from .constants import ERR_POST_DATA, MSG_POST_DATA_SUCCESS
 
 
-class My_azure_logger_api():
+class Azure_logger_api():
     def _build_signature(self, customer_id, shared_key, date, content_length, method, content_type,
                          resource):
         # Returns authorization header which will be used when sending data into Azure Log
