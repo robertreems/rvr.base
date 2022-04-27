@@ -10,3 +10,7 @@ thelogger.log_application_event(
 # print something from the configuration file.
 rvrconfig = rvrbase.Rvrconfig(rvrbase.CONFIG_FILE)
 print(rvrconfig.q1('hwip'))
+
+newdelegate = rvrbase.Mydelegate(rvrbase.CONFIG_FILE)
+print(newdelegate.q1('hwip'))
+newdelegate.send_browser_notification(type='info', message='Dit is een test met nieuw design pattern.')
