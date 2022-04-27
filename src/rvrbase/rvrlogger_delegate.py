@@ -1,12 +1,12 @@
 from dbus import ValidationException
-from . import loganalyticslogger
+import rvrbase
 import logging
 from platform import node
 from .constants import NOTIFY_APPLICATION_EVENT, VALID_MESSAGE_TYPES
 from notify_run import Notify
 
 
-class Rvrlogger(loganalyticslogger.Log_analytics_logger):
+class Rvrlogger(rvrbase.Log_analytics_logger):
 
     def __init__(self):
         super().__init__()
