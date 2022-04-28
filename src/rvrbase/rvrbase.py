@@ -4,21 +4,21 @@ import json
 import sys
 from dbus import ValidationException
 
-from rvrbase import rvrconfig_delegate
 from .__about__ import __version__ as version
-from .notification_api import New_notification_api
-from .azure_logger_api import Azure_logger_api
+from rvrbase.api import New_notification_api
+from rvrbase.api import Azure_logger_api
+from rvrbase.api import Rvrconfig
 from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, NOTIFY_APPLICATION_EVENT,\
     VALID_MESSAGE_TYPES
 
 # todo put it all in try / except
 
 
-class Rvrbase(rvrconfig_delegate.Rvrconfig):
+class Rvrbase():
 
     def __init__(self, path):
-        super().__init__(path)
 
+        self.config_api = Rvrconfig(path)
         self.notifcation_api = New_notification_api()
         self.azure_logger_api = Azure_logger_api()
         self.workspace_id = self.q1('workspace_id')
@@ -86,3 +86,6 @@ class Rvrbase(rvrconfig_delegate.Rvrconfig):
         body_json = json.dumps(body)
         self.azure_logger_api.post_data(
             body_json, log_type, self.workspace_id, self.workspace_prim_key)
+
+    def q1(self, key):
+        return self.config_api.q1(key=key)

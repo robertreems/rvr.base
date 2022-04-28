@@ -25,7 +25,11 @@ class Rvrconfig:
 
     # Very small implementation for querying configuration INI files.
     # It simply assumes all keys are unique and returns a key if found.
-    def q1(self, key):
+    def query_configfile(self, key):
         for section in self.config.sections():
             if key in self.config[section].keys():
                 return self.config[section][key]
+
+    # This function is to be extended with more query functionality. For example arguments.
+    def q1(self, key):
+        return self.query_configfile(key=key)

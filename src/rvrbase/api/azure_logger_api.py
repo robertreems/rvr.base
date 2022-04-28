@@ -5,7 +5,7 @@ import hmac
 import base64
 import logging
 import datetime
-from .constants import ERR_POST_DATA, MSG_POST_DATA_SUCCESS
+from rvrbase.constants import ERR_POST_DATA, MSG_POST_DATA_SUCCESS
 
 
 class Azure_logger_api():
