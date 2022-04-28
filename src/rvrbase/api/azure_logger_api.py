@@ -1,25 +1,18 @@
 # from https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
-
-import json
-import sys
 import requests
 import hashlib
 import hmac
 import base64
 import logging
 import datetime
-from platform import node
-from . import rvrconfig
-from .constants import CONFIG_FILE, ERR_POST_DATA, LOG_TYPE_APPLICATION_EVENT, MSG_POST_DATA_SUCCESS
+from rvrbase.constants import ERR_POST_DATA, MSG_POST_DATA_SUCCESS
 
 
-class Log_analytics_logger:
-
-    def __init__(self):
-        self.conf = rvrconfig.Rvrconfig(CONFIG_FILE)
-
-    def build_signature(self, customer_id, shared_key, date, content_length, method, content_type, resource):
-        """Returns authorization header which will be used when sending data into Azure Log Analytics"""
+class Azure_logger_api():
+    def _build_signature(self, customer_id, shared_key, date, content_length, method, content_type,
+                         resource):
+        # Returns authorization header which will be used when sending data into Azure Log
+        # Analytics
 
         x_headers = 'x-ms-date:' + date
         string_to_hash = method + "\n" + \
@@ -32,7 +25,7 @@ class Log_analytics_logger:
         authorization = "SharedKey {}:{}".format(customer_id, encoded_hash)
         return authorization
 
-    def post_data(self, body, log_type):
+    def post_data(self, body, log_type, workspace_id, workspace_prim_key):
         """Sends payload to Azure Log Analytics Workspace
 
         Keyword arguments:
@@ -47,10 +40,11 @@ class Log_analytics_logger:
         resource = '/api/logs'
         rfc1123date = datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
         content_length = len(body)
-        signature = self.build_signature(
-            self.conf.q1('workspace_id'), self.conf.q1('primary_key'), rfc1123date, content_length, method, content_type, resource)
+        signature = self._build_signature(
+            workspace_id, workspace_prim_key, rfc1123date, content_length, method, content_type,
+            resource)
 
-        uri = 'https://' + self.conf.q1('workspace_id') + '.ods.opinsights.azure.com' + \
+        uri = 'https://' + workspace_id + '.ods.opinsights.azure.com' + \
             resource + '?api-version=2016-04-01'
 
         headers = {
@@ -66,27 +60,3 @@ class Log_analytics_logger:
         else:
             raise RuntimeError(ERR_POST_DATA.format(
                 status_code=response.status_code))
-
-    def post_application_event(self, type, message):
-        body = {
-            "hostname": node(),
-            "script_path": sys.argv[0],
-            "arguments": sys.argv[1:],
-            "type": type,
-            "message": message
-        }
-
-        body_json = json.dumps(body)
-
-        self.post_data(body_json, LOG_TYPE_APPLICATION_EVENT)
-
-    def post_metric(self, log_type, metric_name, value):
-        body = {
-            "hostname": node(),
-            "script_path": sys.argv[0],
-            "metric_name": metric_name,
-            "value": value
-        }
-
-        body_json = json.dumps(body)
-        self.post_data(body_json, log_type)
