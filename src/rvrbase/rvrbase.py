@@ -4,14 +4,12 @@ import json
 import sys
 from dbus import ValidationException
 
-from .__about__ import __version__ as version
+from rvrbase.__about__ import __version__ as version
 from rvrbase.api import New_notification_api
 from rvrbase.api import Azure_logger_api
 from rvrbase.api import Rvrconfig
-from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, NOTIFY_APPLICATION_EVENT,\
+from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, MST_STARTING, NOTIFY_APPLICATION_EVENT,\
     VALID_MESSAGE_TYPES
-
-# todo put it all in try / except
 
 
 class Rvrbase():
@@ -24,9 +22,8 @@ class Rvrbase():
         self.workspace_id = self.q1('workspace_id')
         self.workspace_prim_key = self.q1('primary_key')
 
-        # todo to constant.
-        message = f'Starting, notify URL: {self.notifcation_api.notify.endpoint}'
-        self.send_az_app_event(type='info', message=message)
+        self.send_az_app_event(type='info', message=MST_STARTING.format(
+            url=self.notifcation_api.notify.endpoint))
 
     def send_browser_notification(self, message, type):
         if type not in VALID_MESSAGE_TYPES:
@@ -39,7 +36,7 @@ class Rvrbase():
     def log_app_event(self, type, message, notify_message=False):
         if type not in VALID_MESSAGE_TYPES:
             raise ValidationException(
-                f'{type} is not in {VALID_MESSAGE_TYPES}.')  # todo use constants.
+                f'{type} is not in {VALID_MESSAGE_TYPES}.')
 
         if type == 'debug':
             logging.debug(message)
@@ -58,7 +55,7 @@ class Rvrbase():
     def send_az_app_event(self, type, message):
         if type not in VALID_MESSAGE_TYPES:
             raise ValidationException(
-                f'{type} is not in {VALID_MESSAGE_TYPES}.')  # todo use constants.
+                f'{type} is not in {VALID_MESSAGE_TYPES}.')
 
         body = {
             "hostname": node(),
@@ -71,8 +68,15 @@ class Rvrbase():
 
         body_json = json.dumps(body)
 
-        self.azure_logger_api.post_data(
-            body_json, LOG_TYPE_APPLICATION_EVENT, self.workspace_id, self.workspace_prim_key)
+        try:
+            self.azure_logger_api.post_data(
+                body_json, LOG_TYPE_APPLICATION_EVENT, self.workspace_id, self.workspace_prim_key)
+
+        except Exception as error:
+            message = 'Failed to log message to azure on {node}. With error {error}.'.format(
+                node=node(), error=error)
+            logging.error(message)
+            self.notifcation_api.send_browser_notification(message=message)
 
     def send_az_metric(self, log_type, metric_name, value):
         body = {

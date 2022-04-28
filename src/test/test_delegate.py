@@ -2,6 +2,7 @@ import unittest
 import mock
 
 import rvrbase
+from rvrbase.constants import ERR_POST_DATA
 
 
 class Testrvrconfig(unittest.TestCase):
@@ -50,6 +51,21 @@ class Testrvrconfig(unittest.TestCase):
         mock_logging_info.assert_called()  # should always be called with starting message
         mock_logging_warning.assert_called()
         mock_logging_error.assert_called()
+
+    # Unhappy flow send_az_app_event
+    @mock.patch('rvrbase.api.azure_logger_api')
+    @mock.patch('logging.error')
+    @mock.patch('notify_run.Notify.send')
+    def test_send_az_app_event_error(self, mock_notify, mock_logging_error, mock_azure_logger_api):
+        mock_azure_logger_api.side_effect = RuntimeError(
+            mock.Mock(ERR_POST_DATA.format(status_code=404)))
+        # barMock.side_effect = HttpError(mock.Mock(status=404), 'not found')
+
+        rvrbase.Rvrbase('src/test/testdata/config.ini')
+
+        # An error should be logged to logger and send using notify.
+        mock_logging_error.assert_called()
+        mock_notify.assert_called()
 
 
 if __name__ == '__main__':
