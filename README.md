@@ -60,6 +60,7 @@ python3 example.py
 
 ## Sources used
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
+https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
 
 ## Disclaimer
 This module has been written for my personal use. Feel free to use it but at your own discression. There is no support or whatsoever on my part. 

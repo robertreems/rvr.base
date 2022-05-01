@@ -8,6 +8,7 @@ from rvrbase.__about__ import __version__ as version
 from rvrbase.api import New_notification_api
 from rvrbase.api import Azure_logger_api
 from rvrbase.api import Rvrconfig
+from rvrbase.api import Azure_reader_api
 from rvrbase.constants import LOG_TYPE_APPLICATION_EVENT, MST_STARTING, NOTIFY_APPLICATION_EVENT,\
     VALID_MESSAGE_TYPES
 
@@ -24,6 +25,9 @@ class Rvrbase():
 
         self.send_az_app_event(type='info', message=MST_STARTING.format(
             url=self.notifcation_api.notify.endpoint))
+        
+        self.azure_reader_api = Azure_reader_api()
+        
 
     def send_browser_notification(self, message, type):
         if type not in VALID_MESSAGE_TYPES:
