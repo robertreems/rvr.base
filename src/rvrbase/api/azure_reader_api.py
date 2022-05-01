@@ -1,7 +1,11 @@
+# This class is heavily inspired by
+# https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
+
 import requests
-import logging
 import urllib3
 import json
+
+from rvrbase.constants import ERR_GETTING_AZURE_DATA, ERR_GETTING_TOKEN
 
 
 class Azure_reader_api:
@@ -16,7 +20,7 @@ class Azure_reader_api:
         # self.data = get_data(query=query,token=sp_token, azure_log_customer_id=
         # azure_log_customer_id) # todo move
 
-    def __get_token(tenant, sp_id, sp_secret):
+    def __get_token(self, tenant, sp_id, sp_secret):
         """Obtain authentication token using a Service Principal"""
         login_url = "https://login.microsoftonline.com/" + tenant + "/oauth2/token"
         resource = "https://api.loganalytics.io"
@@ -29,18 +33,14 @@ class Azure_reader_api:
             'resource': resource
         }
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        try:
-            response = requests.post(login_url, data=payload, verify=False)
-
-        except Exception as error:
-            logging.error(error)
+        response = requests.post(login_url, data=payload, verify=False)
 
         if (response.status_code >= 200 and response.status_code <= 299):
-            logging.info('Token obtained')
             token = json.loads(response.content)["access_token"]
             return {"Authorization": str("Bearer " + token), 'Content-Type': 'application/json'}
         else:
-            logging.error("Unable to Read: " + format(response.status_code))
+            raise RuntimeError(ERR_GETTING_TOKEN.format(
+                status_code=response.status_code))
 
     def get_data(query, token, azure_log_customer_id):
         """Executes a KQL on a Azure Log Analytics Workspace
@@ -55,13 +55,10 @@ class Azure_reader_api:
             azure_log_customer_id + "/query"
         query = {"query": query}
 
-        try:
-            response = requests.get(az_url, params=query, headers=token)
-        except Exception as error:
-            logging.error(error)
+        response = requests.get(az_url, params=query, headers=token)
 
         if (response.status_code >= 200 and response.status_code <= 299):
-            logging.info('Query ran successfully')
             return json.loads(response.content)
         else:
-            logging.error("Unable to Read: " + format(response.status_code))
+            raise RuntimeError(ERR_GETTING_AZURE_DATA.format(
+                status_code=response.status_code))
