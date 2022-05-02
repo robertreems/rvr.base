@@ -9,16 +9,18 @@ from rvrbase.constants import ERR_GETTING_AZURE_DATA, ERR_GETTING_TOKEN
 
 
 class Azure_reader_api:
-    def __init__(self, tenant, sp_id, sp_secret):
+    def __init__(self, tenant, sp_id, sp_secret, az_workspace_id):
         # tenant = #'83ebf573-f6a0-4a5a-a14e-323ba97ec356'
         # self.sp_id = '274cef59-fa12-4b39-92f7-4081ae279424' # Application (client) ID
         # self.sp_secret = '3p78Q~pLBhy.qHQxKfvJEb-xoq_ATnqQwBIdobA.' # The service principal secret
-        # self.azure_log_customer_id = '7756814b-7720-4b6d-9fb6-0aa03fe97658'
+        # self.az_workspace_id = '7756814b-7720-4b6d-9fb6-0aa03fe97658'
         # self.query = "app_event_CL  | where type_s  contains 'error' or type_s contains 'warning'"
         self.sp_token = self.__get_token(
             tenant=tenant, sp_id=sp_id, sp_secret=sp_secret)
-        # self.data = get_data(query=query,token=sp_token, azure_log_customer_id=
-        # azure_log_customer_id) # todo move
+        # self.data = get_data(query=query,token=sp_token, az_workspace_id=
+        # az_workspace_id) # todo move
+
+        self.az_workspace_id = az_workspace_id
 
     def __get_token(self, tenant, sp_id, sp_secret):
         """Obtain authentication token using a Service Principal"""
@@ -42,20 +44,20 @@ class Azure_reader_api:
             raise RuntimeError(ERR_GETTING_TOKEN.format(
                 status_code=response.status_code))
 
-    def get_data(query, token, azure_log_customer_id):
+    def get_data(self, query):
         """Executes a KQL on a Azure Log Analytics Workspace
 
         Keyword arguments:
         query -- Kusto query to execute on Azure Log Analytics
         token -- Authentication token generated using get_token
-        azure_log_customer_id -- Workspace ID obtained from Advanced Settings
+        az_workspace_id -- Workspace ID obtained from Advanced Settings
         """
 
         az_url = "https://api.loganalytics.io/v1/workspaces/" + \
-            azure_log_customer_id + "/query"
+            self.az_workspace_id + "/query"
         query = {"query": query}
 
-        response = requests.get(az_url, params=query, headers=token)
+        response = requests.get(az_url, params=query, headers=self.sp_token)
 
         if (response.status_code >= 200 and response.status_code <= 299):
             return json.loads(response.content)

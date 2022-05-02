@@ -29,10 +29,11 @@ class Rvrbase():
         tenant = self.q1('tenant')
         sp_id = self.q1('service_principal_loganalyticsreader_id')
         sp_secret = self.q1('service_principal_loganalyticsreader_secret')
+        az_workspace_id = self.q1('az_workspace_id')
 
         try:
             self.azure_reader_api = Azure_reader_api(
-                tenant=tenant, sp_id=sp_id, sp_secret=sp_secret)
+                tenant=tenant, sp_id=sp_id, sp_secret=sp_secret, az_workspace_id=az_workspace_id)
         except RuntimeError as error:
             self.send_az_app_event(
                 type='error', message=ERR_INIT_AZURE_READER_API.format(error))
@@ -105,3 +106,6 @@ class Rvrbase():
 
     def q1(self, key):
         return self.config_api.q1(key=key)
+
+    def azlog_analyticsq(self, query):
+        return self.azure_reader_api.get_data(query=query)
