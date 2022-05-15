@@ -10,15 +10,8 @@ from rvrbase.constants import ERR_GETTING_AZURE_DATA, ERR_GETTING_TOKEN
 
 class Azure_reader_api:
     def __init__(self, tenant, sp_id, sp_secret, az_workspace_id):
-        # tenant = #'83ebf573-f6a0-4a5a-a14e-323ba97ec356'
-        # self.sp_id = '274cef59-fa12-4b39-92f7-4081ae279424' # Application (client) ID
-        # self.sp_secret = '3p78Q~pLBhy.qHQxKfvJEb-xoq_ATnqQwBIdobA.' # The service principal secret
-        # self.az_workspace_id = '7756814b-7720-4b6d-9fb6-0aa03fe97658'
-        # self.query = "app_event_CL  | where type_s  contains 'error' or type_s contains 'warning'"
         self.sp_token = self.__get_token(
             tenant=tenant, sp_id=sp_id, sp_secret=sp_secret)
-        # self.data = get_data(query=query,token=sp_token, az_workspace_id=
-        # az_workspace_id) # todo move
 
         self.az_workspace_id = az_workspace_id
 
