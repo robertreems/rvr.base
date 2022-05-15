@@ -20,7 +20,7 @@ class Testrvrconfig(unittest.TestCase):
         mock_requests_post.return_value.status_code = 200
 
         config = rvrbase.Rvrbase('src/test/testdata/config.ini')
-        self.assertEqual(config.q1('workspace_id'),
+        self.assertEqual(config.q1('MyfirstLogAnalytics_workspace_id'),
                          '7756814b-7720-4b6d-9fb6-0aa03fe97658')
 
     @mock.patch('requests.post')

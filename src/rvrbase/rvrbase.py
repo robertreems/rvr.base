@@ -20,8 +20,8 @@ class Rvrbase():
         self.config_api = Rvrconfig(path)
         self.notifcation_api = New_notification_api()
         self.azure_logger_api = Azure_logger_api()
-        self.workspace_id = self.q1('workspace_id')
-        self.workspace_prim_key = self.q1('primary_key')
+        self.workspace_id = self.q1('MyfirstLogAnalytics_workspace_id')
+        self.workspace_prim_key = self.q1('MyfirstLogAnalytics_primary_key')
 
         self.send_az_app_event(type='info', message=MST_STARTING.format(
             url=self.notifcation_api.notify.endpoint))
@@ -29,7 +29,7 @@ class Rvrbase():
         tenant = self.q1('tenant')
         sp_id = self.q1('service_principal_loganalyticsreader_id')
         sp_secret = self.q1('service_principal_loganalyticsreader_secret')
-        az_workspace_id = self.q1('az_workspace_id')
+        az_workspace_id = self.q1('MyfirstLogAnalytics_workspace_id')
 
         try:
             self.azure_reader_api = Azure_reader_api(
@@ -91,7 +91,10 @@ class Rvrbase():
             logging.error(message)
             self.notifcation_api.send_browser_notification(message=message)
 
-    def send_az_metric(self, log_type, metric_name, value):
+    def send_az_metric(self, workspace_name, log_type, metric_name, value):
+        workspace_id = self.q1(f'{workspace_name}_workspace_id')
+        workspace_prim_key = self.q1(f'{workspace_name}_primary_key')
+
         body = {
             "hostname": node(),
             "script_path": sys.argv[0],
@@ -102,7 +105,7 @@ class Rvrbase():
 
         body_json = json.dumps(body)
         self.azure_logger_api.post_data(
-            body_json, log_type, self.workspace_id, self.workspace_prim_key)
+            body_json, log_type, workspace_id, workspace_prim_key)
 
     def q1(self, key):
         return self.config_api.q1(key=key)

@@ -4,13 +4,15 @@ import rvrbase as rvrbase
 
 # Log something.
 newdelegate = rvrbase.Rvrbase(rvrbase.CONFIG_FILE)
+
 # logs to both the system (using logger) and Azure.
 newdelegate.log_app_event(
     type='warning', message='Dit is een test met nieuw design pattern.')
 # Sends the message to Azure only.
 newdelegate.send_az_app_event(type='info', message='Just relax.')
 # sends a metric to Azure only.
-newdelegate.send_az_metric(log_type='info', metric_name='somemetric', value=5)
+newdelegate.send_az_metric(workspace_name='powerstatistics', log_type='info',\
+    metric_name='somemetric', value=5)
 
 # Send a notification to the browser(s)
 newdelegate.send_browser_notification(
