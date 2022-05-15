@@ -15,9 +15,21 @@ The configuration file is used for some configuration settings like the Log anal
 
 The file requires the following content:
 ```
+[AZ GENERAL]
+tenant = 83ebf573-f6a0-4a5a-a14e-323ba97ec356
+
 [AZ_LOG_ANALYTICS_WORKSPACE]
-workspace_id = ID OF YOUR WORKSPACE
-primary_key = THE KEY OF  YOUR WORKSPACE
+workspace_id = 'log analytics workspace_id'
+primary_key = 'log analytics primary key'
+powerstatistics_workspace_id = 'log analytics workspace_id'
+powerstatistics_primary_key = 'log analytics primary key'
+
+[AZ SERVICE PRINCIPAL LOGANALYTICSREADER]
+service_principal_loganalyticsreader_id = 'service principal'
+service_principal_loganalyticsreader_secret = 'secret'
+
+[HOME_WIZARD_P1]
+hwip = IP
 ``` 
 
 ## Installing the module
@@ -60,6 +72,7 @@ python3 example.py
 
 ## Sources used
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
+https://medium.com/slalom-build/reading-and-writing-to-azure-log-analytics-c78461056862
 
 ## Disclaimer
 This module has been written for my personal use. Feel free to use it but at your own discression. There is no support or whatsoever on my part. 
